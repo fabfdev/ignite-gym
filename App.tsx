@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
+import { NativeBaseProvider } from '@gluestack-ui/themed-native-base';
 import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 
 export default function App() {
@@ -13,25 +14,12 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Open up App.tsx to start working on your app!</Text>
+    <NativeBaseProvider>
       <StatusBar 
         barStyle="light-content" 
         backgroundColor={'transparent'}
         translucent
       />
-    </View>
+    </NativeBaseProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#202024',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontFamily: 'Roboto_700Bold',
-  }
-});

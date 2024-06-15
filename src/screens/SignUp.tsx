@@ -14,12 +14,13 @@ export function SignUp() {
       <VStack flex={1} bg={"gray.700"} px={10}>
         <Image
           source={BackgroundImg}
+          defaultSource={BackgroundImg}
           alt="Pessoas treinando"
           resizeMode="contain"
           position="absolute"
         />
 
-<Center my={24}>
+        <Center my={24}>
           <LogoSvg />
 
           <Text color={"gray.100"} fontSize={"sm"}>

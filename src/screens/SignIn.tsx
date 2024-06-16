@@ -1,59 +1,81 @@
-import { VStack, Image, Text, Center, Heading, ScrollView } from "native-base";
+import {
+  VStack,
+  Image,
+  Text,
+  Center,
+  Heading,
+  ScrollView,
+  Box,
+} from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 import LogoSvg from "@assets/logo.svg";
 import BackgroundImg from "@assets/background.png";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
 export function SignIn() {
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+
+  function handleNewAccount() {
+    navigation.navigate("signUp");
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <VStack flex={1} bg={"gray.700"} px={10}>
+      <VStack flex={1}>
         <Image
           source={BackgroundImg}
-          alt="Pessoas treinando"
-          resizeMode="contain"
+          resizeMode="cover"
           position={"absolute"}
+          alt="Pessoas treinando"
         />
 
-        <Center my={24}>
-          <LogoSvg />
+        <Box px={10}>
+          <Center my={24}>
+            <LogoSvg />
 
-          <Text color={"gray.100"} fontSize={"sm"}>
-            Treine sua mente e o seu corpo
-          </Text>
-        </Center>
+            <Text color={"gray.100"} fontSize={"sm"}>
+              Treine sua mente e o seu corpo
+            </Text>
+          </Center>
 
-        <Center>
-          <Heading
-            color={"gray.100"}
-            fontSize={"xl"}
-            mb={6}
-            fontFamily={"heading"}
-          >
-            Acesse sua conta
-          </Heading>
+          <Center>
+            <Heading
+              color={"gray.100"}
+              fontSize={"xl"}
+              mb={6}
+              fontFamily={"heading"}
+            >
+              Acesse sua conta
+            </Heading>
 
-          <Input
-            placeholder="E-mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <Input placeholder="Senha" secureTextEntry />
+            <Input
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <Input placeholder="Senha" secureTextEntry />
 
-          <Button title="Acessar" />
-        </Center>
+            <Button title="Acessar" />
+          </Center>
 
-        <Center mt={24}>
-          <Text color={"gray.100"} fontSize={"sm"} mb={3} fontFamily={"body"}>
-            Ainda não tem acesso?
-          </Text>
+          <Center mt={24}>
+            <Text color={"gray.100"} fontSize={"sm"} mb={3} fontFamily={"body"}>
+              Ainda não tem acesso?
+            </Text>
 
-          <Button title="Criar conta" variant={"outline"} />
-        </Center>
+            <Button
+              title="Criar conta"
+              variant={"outline"}
+              onPress={handleNewAccount}
+            />
+          </Center>
+        </Box>
       </VStack>
     </ScrollView>
   );

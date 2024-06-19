@@ -58,6 +58,7 @@ export function Home() {
           px: 8,
         }}
         my={10}
+        minH={10}
         maxH={10}
       />
 

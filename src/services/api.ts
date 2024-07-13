@@ -4,7 +4,7 @@ import { AppError } from '@utils/AppError';
 import { err } from 'react-native-svg';
 
 const api = axios.create({
-    baseURL: 'http://192.168.0.2:3333',
+    baseURL: '192.168.1.102:3333',
     headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

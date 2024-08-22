@@ -1,10 +1,15 @@
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { HStack, Heading, Image, Text, VStack, Icon } from "native-base";
 import { Entypo } from "@expo/vector-icons";
+import { ExerciseDTO } from "@dtos/ExerciseDTO";
 
-type Props = TouchableOpacityProps & {};
+import { api } from "@services/api";
 
-export function ExerciseCard({ ...rest }: Props) {
+type Props = TouchableOpacityProps & {
+  data: ExerciseDTO;
+};
+
+export function ExerciseCard({ data, ...rest }: Props) {
   return (
     <TouchableOpacity {...rest}>
       <HStack
@@ -17,7 +22,7 @@ export function ExerciseCard({ ...rest }: Props) {
       >
         <Image
           source={{
-            uri: "https://media.istockphoto.com/id/1370782467/pt/foto/shot-of-a-muscular-young-man-exercising-with-a-kettlebell-in-a-gym.jpg?s=612x612&w=0&k=20&c=5IL5FWgkg9PqDoip_qhBJmqimvtJBi_vQefOz75q4w4=",
+            uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}`,
           }}
           alt="Imagem musculação"
           w={16}
@@ -28,10 +33,10 @@ export function ExerciseCard({ ...rest }: Props) {
         />
         <VStack flex={1}>
           <Heading fontSize={"lg"} color={"white"} fontFamily={"heading"}>
-            Remada com barra
+            {data.name}
           </Heading>
           <Text fontSize={"sm"} color={"gray.200"} mt={1} numberOfLines={2}>
-            3 sériex x 12 repetições
+            {data.series} séries x {data.repetitions} repetições
           </Text>
         </VStack>
         <Icon as={Entypo} name="chevron-thin-right" color={"gray.300"} />

@@ -8,6 +8,8 @@ import {
 } from "@gluestack-ui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
@@ -24,6 +26,19 @@ type FormDataProps = {
   confirm_password: string;
 };
 
+const signUpSchema = yup.object({
+  name: yup.string().required("Informe o nome"),
+  email: yup.string().required("Informe o email").email("E-mail inválido"),
+  password: yup
+    .string()
+    .required("Informe a senha")
+    .min(6, "A senha deve ter pelo menos 6 dígitos"),
+  confirm_password: yup
+    .string()
+    .required("Confirme a senha")
+    .oneOf([yup.ref("password"), ""], "A confirmação da senha não confere"),
+});
+
 export function SignUp() {
   const navigator = useNavigation<AuthNavigatorRoutesProps>();
 
@@ -38,6 +53,7 @@ export function SignUp() {
       password: "",
       confirm_password: "",
     },
+    resolver: yupResolver(signUpSchema),
   });
 
   function handleSignIn() {
@@ -83,9 +99,6 @@ export function SignUp() {
             <Controller
               control={control}
               name="name"
-              rules={{
-                required: "Informe o nome",
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Nome"
@@ -99,13 +112,6 @@ export function SignUp() {
             <Controller
               control={control}
               name="email"
-              rules={{
-                required: "Informe o e-mail",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "E-mail inválido",
-                },
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="E-mail"
@@ -127,6 +133,7 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.password?.message}
                 />
               )}
             />
@@ -142,6 +149,7 @@ export function SignUp() {
                   value={value}
                   onSubmitEditing={handleSubmit(handleSignUp)}
                   returnKeyType="send"
+                  errorMessage={errors.confirm_password?.message}
                 />
               )}
             />

@@ -82,11 +82,15 @@ export function Home() {
     fetchGroups();
   }, []);
 
-  useFocusEffect(
+  /*useFocusEffect(
     useCallback(() => {
       fetchExercisesByGroup();
     }, [groupSelected])
-  );
+  );*/
+
+  useEffect(() => {
+    fetchExercisesByGroup()
+  }, [groupSelected]);
 
   return (
     <VStack flex={1}>

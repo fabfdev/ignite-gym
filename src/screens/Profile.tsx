@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
 import { Center, Heading, Text, useToast, VStack } from "@gluestack-ui/themed";
 import { Controller, useForm } from "react-hook-form";
@@ -16,6 +16,9 @@ import { Button } from "@components/Button";
 import { ToastMessage } from "@components/ToastMessage";
 
 import { useAuth } from "@hooks/useAuth";
+
+import defaultUserPhotoImg from "@assets/userPhotoDefault.png";
+import { Loading } from "@components/Loading";
 
 type FormDataProps = {
   name: string;
@@ -55,7 +58,6 @@ const profileSchema = yup.object({
 
 export function Profile() {
   const [isLoading, setIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState("https://github.com/fabfdev.png");
 
   const toast = useToast();
   const { user, updateUserProfile } = useAuth();
@@ -116,13 +118,33 @@ export function Profile() {
         const userPhotoUploadForm = new FormData();
         userPhotoUploadForm.append("avatar", photoFile);
 
-        await api.patch("/users/avatar", userPhotoUploadForm, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const avatarUpdatedResponsed = await api.patch(
+          "/users/avatar",
+          userPhotoUploadForm,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-        console.log("foto atualizada");
+        const userUpdated = user;
+        userUpdated.name = "asd asd";
+        userUpdated.avatar = avatarUpdatedResponsed.data.avatar;
+
+        await updateUserProfile(userUpdated);
+
+        toast.show({
+          placement: "top",
+          render: ({ id }) => (
+            <ToastMessage
+              id={id}
+              action="success"
+              title={"Foto atualizada"}
+              onClose={() => toast.close(id)}
+            />
+          ),
+        });
       }
     } catch (error) {
       console.log(error);
@@ -140,7 +162,18 @@ export function Profile() {
         old_password: data.old_password,
       });
       await updateUserProfile(userUpdated);
-      console.log("Perfil atualizado com sucesso");
+
+      toast.show({
+        placement: "top",
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="success"
+            title={"Perfil atualizado com sucesso"}
+            onClose={() => toast.close(id)}
+          />
+        ),
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -154,7 +187,15 @@ export function Profile() {
 
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt={"$6"} px={"$10"}>
-          <UserPhoto source={{ uri: userPhoto }} alt="Foto" size="xl" />
+          <UserPhoto
+            source={
+              user.avatar
+                ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                : defaultUserPhotoImg
+            }
+            alt="Foto"
+            size="xl"
+          />
 
           <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text

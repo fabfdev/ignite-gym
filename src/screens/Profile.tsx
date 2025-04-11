@@ -105,7 +105,24 @@ export function Profile() {
           });
         }
 
-        setUserPhoto(photoUri);
+        const fileExt = photoUri.split(".").pop();
+
+        const photoFile = {
+          name: `${user.name}.${fileExt}`.toLowerCase(),
+          uri: photoUri,
+          type: `${photoSelected.assets[0].type}/${fileExt}`,
+        } as any;
+
+        const userPhotoUploadForm = new FormData();
+        userPhotoUploadForm.append("avatar", photoFile);
+
+        await api.patch("/users/avatar", userPhotoUploadForm, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        console.log("foto atualizada");
       }
     } catch (error) {
       console.log(error);

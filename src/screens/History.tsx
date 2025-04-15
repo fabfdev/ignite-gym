@@ -6,6 +6,7 @@ import { Heading, Text, useToast, VStack } from "@gluestack-ui/themed";
 import { ScreenHeader } from "@components/ScreenHeader";
 import { HistoryCard } from "@components/HistoryCard";
 import { ToastMessage } from "@components/ToastMessage";
+import { Loading } from "@components/Loading";
 
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
@@ -52,33 +53,37 @@ export function History() {
   return (
     <VStack flex={1}>
       <ScreenHeader title="Histórico de exercícios" />
-      <SectionList
-        sections={exercies}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <HistoryCard data={item} />}
-        renderSectionHeader={({ section }) => (
-          <Heading
-            color="$gray200"
-            fontSize={"$md"}
-            mt={"$10"}
-            mb={"$3"}
-            fontFamily="$heading"
-          >
-            {section.title}
-          </Heading>
-        )}
-        style={{ paddingHorizontal: 32 }}
-        contentContainerStyle={
-          exercies.length === 0 && { flex: 1, justifyContent: "center" }
-        }
-        ListEmptyComponent={() => (
-          <Text color="$gray100" textAlign="center">
-            Não há exercícios registrados ainda. {"\n"}Vamos fazer exercícios
-            hoje?
-          </Text>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SectionList
+          sections={exercies}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <HistoryCard data={item} />}
+          renderSectionHeader={({ section }) => (
+            <Heading
+              color="$gray200"
+              fontSize={"$md"}
+              mt={"$10"}
+              mb={"$3"}
+              fontFamily="$heading"
+            >
+              {section.title}
+            </Heading>
+          )}
+          style={{ paddingHorizontal: 32 }}
+          contentContainerStyle={
+            exercies.length === 0 && { flex: 1, justifyContent: "center" }
+          }
+          ListEmptyComponent={() => (
+            <Text color="$gray100" textAlign="center">
+              Não há exercícios registrados ainda. {"\n"}Vamos fazer exercícios
+              hoje?
+            </Text>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </VStack>
   );
 }
